@@ -396,7 +396,7 @@ ifeq ($(CONFIG_PLATFORM_ARM_S5P), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ANDROID -DCONFIG_MINIMAL_MEMORY_USAGE #-DCONFIG_DEBUG_RTW_WX_SET_PRIV
 ARCH := arm
 CROSS_COMPILE = /usr/local/arm/arm-2009q3/bin/arm-none-linux-gnueabi-
-KSRC := /home/he/work/crepo_kernel/samsung-kernel-herring/samsung-kernel-herring
+KSRC := /home/he/work/test_android/qt210_ics_kernel3.0.8
 MODULE_NAME := rtl8192cu
 endif
 
