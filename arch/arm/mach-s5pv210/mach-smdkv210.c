@@ -1200,7 +1200,8 @@ static void __init smdkv210_fixup(struct machine_desc *desc,
 		struct tag *tags, char **cmdline,
 		struct meminfo *mi)
 {
-	mi->bank[0].start = 0x20000000;
+/* hcj for dbg -- start from 0x30000000 */
+	mi->bank[0].start = 0x30000000;
 	mi->bank[0].size = 512 * SZ_1M;
 	
     mi->nr_banks = 1;
