@@ -28,6 +28,8 @@
 #include <linux/input.h>
 #include <linux/i2c/ft5x06_ts.h>
 #include <linux/earlysuspend.h>
+#include <mach/gpio.h>
+#include <plat/gpio-cfg.h>
 #include <linux/interrupt.h>
 #include <linux/delay.h>
 
@@ -263,7 +265,7 @@ static void ft5x0x_report_value(void)
 			input_report_abs(data->input_dev, ABS_MT_TRACKING_ID, event->touch_ID5);
 			input_report_abs(data->input_dev, ABS_MT_TOUCH_MAJOR, event->pressure);
 			input_report_abs(data->input_dev, ABS_MT_POSITION_X, SCREEN_MAX_X - event->x5);
-			input_report_abs(data->input_dev, ABS_MT_POSITION_Y, event->y5);
+			input_report_abs(data->input_dev, ABS_MT_POSITION_Y, SCREEN_MAX_Y - event->y5);
 			input_report_abs(data->input_dev, ABS_MT_WIDTH_MAJOR, 1);
 			input_mt_sync(data->input_dev);
 			TS_DEBUG("===x5 = %d,y5 = %d ====\n",event->x2,event->y2);
@@ -271,7 +273,7 @@ static void ft5x0x_report_value(void)
 			input_report_abs(data->input_dev, ABS_MT_TRACKING_ID, event->touch_ID4);
 			input_report_abs(data->input_dev, ABS_MT_TOUCH_MAJOR, event->pressure);
 			input_report_abs(data->input_dev, ABS_MT_POSITION_X, SCREEN_MAX_X - event->x4);
-			input_report_abs(data->input_dev, ABS_MT_POSITION_Y, event->y4);
+			input_report_abs(data->input_dev, ABS_MT_POSITION_Y, SCREEN_MAX_Y - event->y4);
 			input_report_abs(data->input_dev, ABS_MT_WIDTH_MAJOR, 1);
 			input_mt_sync(data->input_dev);
 			TS_DEBUG("===x4 = %d,y4 = %d ====\n",event->x2,event->y2);
@@ -279,7 +281,7 @@ static void ft5x0x_report_value(void)
 			input_report_abs(data->input_dev, ABS_MT_TRACKING_ID, event->touch_ID3);
 			input_report_abs(data->input_dev, ABS_MT_TOUCH_MAJOR, event->pressure);
 			input_report_abs(data->input_dev, ABS_MT_POSITION_X, SCREEN_MAX_X - event->x3);
-			input_report_abs(data->input_dev, ABS_MT_POSITION_Y, event->y3);
+			input_report_abs(data->input_dev, ABS_MT_POSITION_Y, SCREEN_MAX_Y - event->y3);
 			input_report_abs(data->input_dev, ABS_MT_WIDTH_MAJOR, 1);
 			input_mt_sync(data->input_dev);
 			TS_DEBUG("===x3 = %d,y3 = %d ====\n",event->x2,event->y2);
@@ -287,7 +289,7 @@ static void ft5x0x_report_value(void)
 			input_report_abs(data->input_dev, ABS_MT_TRACKING_ID, event->touch_ID2);
 			input_report_abs(data->input_dev, ABS_MT_TOUCH_MAJOR, event->pressure);
 			input_report_abs(data->input_dev, ABS_MT_POSITION_X, SCREEN_MAX_X - event->x2);
-			input_report_abs(data->input_dev, ABS_MT_POSITION_Y, event->y2);
+			input_report_abs(data->input_dev, ABS_MT_POSITION_Y, SCREEN_MAX_Y - event->y2);
 			input_report_abs(data->input_dev, ABS_MT_WIDTH_MAJOR, 1);
 			input_mt_sync(data->input_dev);
 			TS_DEBUG("===x2 = %d,y2 = %d ====\n",event->x2,event->y2);
@@ -295,7 +297,7 @@ static void ft5x0x_report_value(void)
 			input_report_abs(data->input_dev, ABS_MT_TRACKING_ID, event->touch_ID1);
 			input_report_abs(data->input_dev, ABS_MT_TOUCH_MAJOR, event->pressure);
 			input_report_abs(data->input_dev, ABS_MT_POSITION_X, SCREEN_MAX_X - event->x1);
-			input_report_abs(data->input_dev, ABS_MT_POSITION_Y, event->y1);
+			input_report_abs(data->input_dev, ABS_MT_POSITION_Y, SCREEN_MAX_Y - event->y1);
 			input_report_abs(data->input_dev, ABS_MT_WIDTH_MAJOR, 1);
 			input_mt_sync(data->input_dev);
 			TS_DEBUG("===x1 = %d,y1 = %d ====\n",event->x1,event->y1);
@@ -306,7 +308,7 @@ static void ft5x0x_report_value(void)
 #else	/* CONFIG_FT5X0X_MULTITOUCH*/
 	if (event->touch_point == 1) {
 		input_report_abs(data->input_dev, ABS_X, SCREEN_MAX_X - event->x1);
-		input_report_abs(data->input_dev, ABS_Y, event->y1);
+		input_report_abs(data->input_dev, ABS_Y, SCREEN_MAX_Y - event->y1);
 		input_report_abs(data->input_dev, ABS_PRESSURE, event->pressure);
 	}
 	input_report_key(data->input_dev, BTN_TOUCH, 1);
@@ -367,7 +369,15 @@ ft5x0x_ts_probe(struct i2c_client *client, const struct i2c_device_id *id)
 	int err = 0;
 	
 	TS_DEBUG("\n\n\n\n=ft5x0x_ts_probe=\n");
-	
+	/* hcj dbg start */
+	err = gpio_request(ENABLE_PORT, "TS_ENABLE");	//Request IO
+	if (err < 0) 
+	{
+		printk(KERN_ALERT "Failed to request GPIO:%d, ERRNO:%d\n",(int)ENABLE_PORT,err);
+		goto exit_check_functionality_failed;
+	}	
+	gpio_direction_output(ENABLE_PORT, 1);	//Touchscreen is waiting to wakeup
+	/* hcj dbg end */
 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
 		err = -ENODEV;
 		goto exit_check_functionality_failed;
