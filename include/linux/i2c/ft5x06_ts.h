@@ -1,11 +1,14 @@
 #ifndef __LINUX_FT5X0X_TS_H__
 #define __LINUX_FT5X0X_TS_H__
 
-#define SCREEN_MAX_X    1024//800
-#define SCREEN_MAX_Y    600//480
+#define SCREEN_MAX_X    800//1024
+#define SCREEN_MAX_Y    480//600
 #define PRESS_MAX       255
 
 #define FT5X0X_NAME	"ft5x06_ts"
+
+#define ENABLE_PORT S5P_EXT_INT1(3)	//SHUTDOWN管脚号
+
 
 struct ft5x0x_ts_platform_data{
 	u16	intr;		/* irq number	*/

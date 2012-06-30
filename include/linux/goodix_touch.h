@@ -42,7 +42,7 @@
 #define TS_INT 		gpio_to_irq(INT_PORT)		//Interrupt Number,EINT18 as 119
 
 /* hcj: need modify */
-#define 	SHUTDOWN_PORT S5P_EXT_INT0(11)	//SHUTDOWN管脚号
+#define 	SHUTDOWN_PORT S5P_EXT_INT1(3)	//SHUTDOWN管脚号
 #define  INT_CFG    	S3C_GPIO_SFN(15)		//IO configer,EINT type
 
 #define MAX_FINGER_NUM	5						//最大支持手指数(<=5)
