@@ -1041,6 +1041,15 @@ static struct i2c_board_info smdkv210_i2c_devs0[] __initdata = {
         .irq = IRQ_EINT(4), 
     },
 #endif
+/* hcj needs modification */
+#ifdef  CONFIG_TOUCHSCREEN_FT5X0X
+
+        {
+                I2C_BOARD_INFO("ft5x06_ts", 0x55),
+        .irq = IRQ_EINT(4),
+    },
+#endif
+
 };
 
 static struct i2c_board_info smdkv210_i2c_devs1[] __initdata = {
