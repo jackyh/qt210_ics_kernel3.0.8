@@ -756,4 +756,13 @@ config TOUCHSCREEN_GOODIX
           If unsure, say N.To compile this driver as a module, choose M here:
           the module will be called goodix_touch.ko.
 
+config TOUCHSCREEN_FT5X0X
+        tristate "FocalTech tf5x0x touchscreen"
+        depends on I2C
+        default n
+        help
+          Say Y here if you have the FocalTech ft5x0x touchscreen.
+
+          If unsure, say N.
+
 endif
