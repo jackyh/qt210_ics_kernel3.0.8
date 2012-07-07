@@ -358,9 +358,8 @@ BIT_NO_CHANGE:
 	
 XFER_ERROR:	
 NO_ACTION:
-	if(ts->use_irq)
-		enable_irq(ts->client->irq);
-
+	count = 0;
+		
 }
 
 /*******************************************************	
@@ -393,9 +392,8 @@ return：
 static irqreturn_t goodix_ts_irq_handler(int irq, void *dev_id)
 {
 	struct goodix_ts_data *ts = dev_id;
-	//hcj: for debug
+	/* hcj: for debug */
 	//printk(KERN_CRIT "interrupt for guitar arrived.\n");
-	disable_irq_nosync(ts->client->irq);
 	queue_work(goodix_wq, &ts->work);
 	
 	return IRQ_HANDLED;
