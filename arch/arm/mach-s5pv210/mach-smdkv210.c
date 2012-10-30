@@ -15,6 +15,7 @@
 #include <linux/serial_core.h>
 #include <linux/sysdev.h>
 #include <linux/dm9000.h>
+#include <linux/smsc911x.h>
 #include <linux/fb.h>
 #include <linux/gpio.h>
 #include <linux/clk.h>
