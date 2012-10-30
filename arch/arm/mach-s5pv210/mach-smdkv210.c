@@ -135,7 +135,8 @@ static struct samsung_keypad_platdata smdkv210_keypad_data __initdata = {
 	.rows		= 8,
 	.cols		= 8,
 };
-
+//yjc for eth support
+#ifdef CONFIG_DM9000
 static struct resource smdkv210_dm9000_resources[] = {
 	[0] = {
 		.start	= S5PV210_PA_SROM_BANK5,
@@ -168,6 +169,40 @@ struct platform_device smdkv210_dm9000 = {
 		.platform_data	= &smdkv210_dm9000_platdata,
 	},
 };
+#endif
+#ifdef CONFIG_SMSC911X 
+static struct smsc911x_platform_config smdkv210_smsc911x_config = {
+	.phy_interface  = PHY_INTERFACE_MODE_MII,
+	.irq_polarity   = SMSC911X_IRQ_POLARITY_ACTIVE_LOW,
+	.irq_type       = SMSC911X_IRQ_TYPE_PUSH_PULL,
+	.flags          = SMSC911X_USE_16BIT ,
+// you can edit the mac address below instead of the random one
+//	.mac		= { 0x00, 0x09, 0xc0, 0xff, 0xec, 0x48 },
+	};
+static struct resource smdkv210_smsc911x_resources[] = {
+	[0] = {
+		.start	= S5PV210_PA_SMSC9220,
+		.end	= S5PV210_PA_SMSC9220 + 0xFC,
+		.flags	= IORESOURCE_MEM,
+	},
+	[1] = {
+		.start	= IRQ_EINT(9),
+		.end	= IRQ_EINT(9),
+		.flags	= IORESOURCE_IRQ | IORESOURCE_IRQ_LOWLEVEL | IRQF_TRIGGER_LOW,
+	},
+};
+struct platform_device s5pv210_device_smsc911x = {
+	.name		= "smsc911x",
+	.id		= -1,
+	.num_resources	= ARRAY_SIZE(smdkv210_smsc911x_resources),
+	.resource	= smdkv210_smsc911x_resources,
+	.dev		= {
+		.platform_data	= &smdkv210_smsc911x_config,
+	},
+
+};
+#endif
+//yjc for eth support end
 
 //#ifdef CONFIG_FB_S3C_LTE480WV
 #define S5PV210_LCD_WIDTH 800
@@ -702,7 +737,18 @@ static struct platform_device *smdkv210_devices[] __initdata = {
 
 	&samsung_device_keypad,
 
+//yjc for eth support
+/*	&smdkv210_dm9000,    */
+
+#ifdef CONFIG_DM9000
 	&smdkv210_dm9000,
+#endif
+
+#ifdef CONFIG_SMSC911X
+	&s5pv210_device_smsc911x,
+#endif
+//yjc for eth support end
+
 #ifdef CONFIG_VIDEO_MFC50
 	&s3c_device_mfc,
 #endif
@@ -1012,7 +1058,8 @@ static struct s3c_platform_jpeg jpeg_plat __initdata = {
 	.max_thumb_height	= 240,
 };
 #endif
-
+// yjc for eth support
+#ifdef CONFIG_DM9000
 static void __init smdkv210_dm9000_init(void)
 {
 	unsigned int tmp;
@@ -1029,6 +1076,8 @@ static void __init smdkv210_dm9000_init(void)
 	tmp |= (1 << S5P_SROM_BW__NCS5__SHIFT);
 	__raw_writel(tmp, S5P_SROM_BW);
 }
+#endif
+// yjc for eth support end
 
 static struct i2c_board_info smdkv210_i2c_devs0[] __initdata = {
 	{ I2C_BOARD_INFO("24c08", 0x50), },     /* Samsung S524AD0XD1 */
@@ -1222,7 +1271,11 @@ static void __init smdkv210_machine_init(void)
 {
 	s3c_pm_init();
 
+// yjc for eth support
+#ifdef CONFIG_DM9000
 	smdkv210_dm9000_init();
+#endif
+// yjc for eth support end
 	
 #ifdef CONFIG_ANDROID_PMEM
     android_pmem_set_platdata();
