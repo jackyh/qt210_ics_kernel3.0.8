@@ -604,10 +604,10 @@ static int __devinit s3c_rtc_probe(struct platform_device *pdev)
 /*	max8998_rtc_read_time_hack(&tm);*/
 
 	/* update time from pmic */
-// yjc 
+/* yjc */
 	s3c_rtc_gettime(&pdev->dev, &tm);
 /* update time */
-// yjc end
+/* yjc end */
 
 #if defined(CONFIG_CPU_S5PV210)
 	year = tm.tm_year;

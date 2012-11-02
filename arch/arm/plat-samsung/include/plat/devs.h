@@ -175,11 +175,11 @@ extern struct platform_device s5p_device_ehci;
 
 extern struct platform_device exynos4_device_sysmmu;
 extern struct platform_device s5p_device_rtc;
-//yjc for LAN9220 support
+/* yjc for LAN9220 support */
 #ifdef CONFIG_SMSC911X
 extern struct platform_driver smsc911x_driver;
 #endif
-//yjc for LAN9220 support end
+/* yjc for LAN9220 support end */
 extern struct platform_device s3c_device_usb_ehci;
 extern struct platform_device s3c_device_usb_ohci;
 

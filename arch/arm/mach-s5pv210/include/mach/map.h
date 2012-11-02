@@ -15,10 +15,10 @@
 
 #include <plat/map-base.h>
 #include <plat/map-s5p.h>
-//yjc for LAN9220 support
+/* yjc for LAN9220 support */
 #define S5PV210_PA_SMSC9220       (0xA8000000)
 #define S5P_PA_SMSC9220          S5PV210_PA_SMSC9220
-//yjc for LAN9220 support end
+/* yjc for LAN9220 support end */
 
 #if defined(CONFIG_MACH_SMDKV210)
 #define S5PV210_PA_SDRAM	(0x30000000)
